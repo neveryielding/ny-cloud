@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nycloud.admin.mapper.SysRoleMapper">
+  <resultMap id="BaseResultMap" type="com.nycloud.admin.model.SysRole">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+  </resultMap>
+  <select id="selectUserNoRoles" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select * from sys_role where id not in (select role_id from sys_user_role_pk where user_id = #{userId,jdbcType=BIGINT})
+    <if test="name != null">
+      and name like '%${name}%'
+    </if>
+  </select>
+  <select id="selectUserRoles" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select A.* from sys_role as A where A.id in (select B.role_id from sys_user_role_pk as B where B.user_id = #{userId,jdbcType=BIGINT})
+    <if test="name != null">
+      and A.name like '%${name}%'
+    </if>
+  </select>
+  <select id="selectUserGroupNoRoles" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select A.* from sys_role as A where A.id not in (select B.role_id from sys_user_group_role_pk AS B where B.group_id = #{groupId,jdbcType=INTEGER})
+    <if  test="name != null">
+      and A.name like '%${name}%'
+    </if>
+  </select>
+  <select id="selectUserGroupRoles" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select A.* from sys_role as A where A.id in (select B.role_id from sys_user_group_role_pk as B where B.group_id = #{groupId,jdbcType=INTEGER})
+    <if test="name != null">
+      and A.name like '%${name}%'
+    </if>
+  </select>
+  <select id="selectUserAndGroupResultRoles" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select * from sys_role where id in
+    (select role_id from sys_user_group_role_pk
+    where group_id in (select group_id from sys_user_group_pk where user_id = #{userId,jdbcType=BIGINT})
+    union all select role_id from sys_user_role_pk where user_id = #{userId,jdbcType=BIGINT})
+  </select>
+</mapper>

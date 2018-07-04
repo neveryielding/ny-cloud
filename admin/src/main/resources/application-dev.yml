@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: nycloud-admin
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/nycloud-admin-v2?useUnicode=true&characterEncoding=utf-8&useSSL=false&zeroDateTimeBehavior=convertToNull
+    username: root
+    password: 123456
+    driverClassName: com.mysql.jdbc.Driver
+server:
+  port: 8762
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8760/eureka/
+  instance:
+    hostname: localhost
+mybatis:
+  type-aliases-package: com.nycloud.admin.model
+  mapper-locations: "classpath*:mapper/*.xml"

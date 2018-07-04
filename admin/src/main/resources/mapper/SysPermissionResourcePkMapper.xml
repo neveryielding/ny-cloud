@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nycloud.admin.mapper.SysPermissionResourcePkMapper">
+  <resultMap id="BaseResultMap" type="com.nycloud.admin.model.SysPermissionResourcePk">
+    <result column="permission_id" jdbcType="INTEGER" property="permissionId" />
+    <result column="resource_id" jdbcType="BIGINT" property="resourceId" />
+  </resultMap>
+  <insert id="insertPermissionResources" parameterType="java.util.List">
+    insert into sys_permission_resource_pk (permission_id, resource_id)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      ( #{item.permissionId}, #{item.resourceId} )
+    </foreach>
+  </insert>
+  <delete id="deletePermissionResources" parameterType="java.util.Map">
+    delete from sys_permission_resource_pk where permission_id = #{permissionId,jdbcType=INTEGER} and resource_id in
+    <foreach item="item" collection="resourceIds" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+</mapper>

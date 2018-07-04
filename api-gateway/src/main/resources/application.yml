@@ -1,0 +1,57 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: nycloud-api-gateway
+
+server:
+  port: 7000
+
+zuul:
+  ribbon:
+    eager-load:
+      enabled: true
+  host:
+    maxTotalConnections: 200
+    maxPerRouteConnections: 20
+  routes:
+    auth:
+      path: /user/**
+      serviceId: nycloud-auth-server
+      sensitiveHeaders: Cookie,Set-Cookie
+    login:
+      path: /login/**
+      serviceId: nycloud-auth-server
+      sensitiveHeaders: Cookie,Set-Cookie
+    admin:
+      path: /admin/**
+      serviceId: nycloud-admin
+      sensitiveHeaders: Cookie,Set-Cookie
+  retryable: true
+
+ribbon:
+  MaxAutoRetries: 1
+  MaxAutoRetriesNextServer: 0
+  ReadTimeout: 5000
+  ConnectTimeout: 5000
+default:
+  execution:
+    isolation:
+      thread:
+        timeoutInMilliseconds: 60000
+auth:
+  permitall:
+    -
+      pattern: /login/**
+    -
+      pattern: /**/public/**
+security:
+  oauth2:
+    client:
+      access-token-uri: /oauth/token
+      user-authorization-uri: /oauth/authorize
+      client-id: frontend
+      client-secret: frontend
+    resource:
+      user-info-uri: /userinfo
+      token-info-uri: /oauth/check_token

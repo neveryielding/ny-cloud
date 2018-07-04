@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nycloud.admin.mapper.SysUserMapper">
+  <resultMap id="BaseResultMap" type="com.nycloud.admin.model.SysUser">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="create_time" jdbcType="BIGINT" property="createTime" />
+    <result column="last_password_change" jdbcType="BIGINT" property="lastPasswordChange" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="authorities" jdbcType="VARCHAR" property="authorities" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+  </resultMap>
+  <resultMap id="UserGroupResultMap" type="com.nycloud.admin.vo.SysUserInfo" extends="BaseResultMap">
+    <id column="group_id" jdbcType="INTEGER" property="groupId" />
+    <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+  </resultMap>
+  <select id="selectUserGroup" parameterType="java.lang.Long" resultMap="UserGroupResultMap">
+    select A.*, B.group_id, C.name as group_name from sys_user A LEFT JOIN sys_user_group_pk B ON A.id = B.user_id LEFT JOIN sys_user_group C ON B.group_id = C.id WHERE A.id = #{roleId,jdbcType=BIGINT}
+  </select>
+  <select id="selectRoleNoExistUsers" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select A.* from sys_user as A where A.id not in (select B.user_id from sys_user_role_pk as B where B.role_id = #{roleId,jdbcType=INTEGER})
+    <if test="name != null">
+     and A.username like '%${name}%'
+    </if>
+  </select>
+  <select id="selectRoleUsers" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select A.* from sys_user as A where A.id IN (select B.user_id from sys_user_role_pk AS B where B.role_id = #{roleId,jdbcType=INTEGER})
+    <if  test="name != null">
+      and A.username like '%${name}%'
+    </if>
+  </select>
+  <select id="selectGroupUsers" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select A.* from sys_user as A where A.id IN (select B.user_id from sys_user_group_pk AS B where B.group_id = #{groupId,jdbcType=INTEGER})
+    <if  test="name != null">
+      and A.username like '%${name}%'
+    </if>
+  </select>
+  <select id="selectGroupNoUsers" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select A.* from sys_user A left join sys_user_group_pk B on (A.id = B.user_id) where B.user_id is null
+    <if  test="name != null">
+      and A.name like '%${name}%'
+    </if>
+  </select>
+</mapper>

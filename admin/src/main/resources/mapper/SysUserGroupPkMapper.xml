@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nycloud.admin.mapper.SysUserGroupPkMapper">
+  <resultMap id="BaseResultMap" type="com.nycloud.admin.model.SysUserGroupPk">
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="group_id" jdbcType="INTEGER" property="groupId" />
+  </resultMap>
+  <insert id="insertGroupUsers" parameterType="java.util.List">
+    insert into sys_user_group_pk (group_id, user_id)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      ( #{item.groupId}, #{item.userId} )
+    </foreach>
+  </insert>
+  <delete id="deleteGroupUsers" parameterType="java.util.Map">
+    delete from sys_user_group_pk where group_id = #{groupId,jdbcType=INTEGER} and user_id in
+    <foreach item="item" collection="userIds" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+  <update id="updateGroupUser" parameterType="java.util.Map">
+    update set group_id = #{groupId, jdbcType=BIGINT} from sys_user_group_pk where group_id = #{groupId, jdbcType=INTEGER} and user_id = #{userId, jdbcType=BIGINT}
+  </update>
+</mapper>

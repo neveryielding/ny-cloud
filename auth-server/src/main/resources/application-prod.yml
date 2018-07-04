@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: nycloud-auth-server
+  datasource:
+    url: jdbc:mysql://172.16.164.20:3306/nycloud-admin-v2?useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: 123456
+    driverClassName: com.mysql.jdbc.Driver
+    dbcp2:
+      max-idle: 5
+      max-wait-millis: 10000
+      min-idle: 2
+      initial-size: 3
+      validation-query: SELECT 1
+      time-between-eviction-runs-millis: 18800
+    tomcat:
+      jdbc-interceptors: ConnectionState;SlowQueryReport(threshold=50)
+  redis:
+    database: 0
+    host: 172.16.164.20
+    password:
+    timeout: 3000
+    jedis:
+      pool:
+        max-active: 5
+        min-idle: 0
+        max-wait: 1
+        max-idle: 8
+    port: 6379
+server:
+  port: 8761
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://172.16.164.20:8760/eureka/ #服务注册中心地址
+  instance:
+    hostname: 172.16.164.20

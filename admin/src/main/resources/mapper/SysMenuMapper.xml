@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nycloud.admin.mapper.SysMenuMapper">
+  <resultMap id="BaseResultMap" type="com.nycloud.admin.model.SysMenu">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="level" jdbcType="INTEGER" property="level" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="path" jdbcType="VARCHAR" property="path" />
+    <result column="component" jdbcType="VARCHAR" property="component" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+  </resultMap>
+  <resultMap id="MenuTreeMap" type="com.nycloud.admin.model.MenuTree" extends="BaseResultMap"></resultMap>
+  <select id="selectByAll" parameterType="java.lang.Integer" resultMap="MenuTreeMap">
+    select id, title, icon, parent_id, sort, level, name, path, component, description,
+    state
+    from sys_menu where state = #{state,jdbcType=INTEGER} order by level,sort,id asc
+  </select>
+  <select id="selectPermissionNoExistMenus" parameterType="java.lang.Integer" resultMap="MenuTreeMap">
+    select * from sys_menu where id not in (select menu_id from sys_permission_menu_pk where permission_id = #{permissionId,jdbcType=INTEGER})
+    order by level,sort,id asc
+  </select>
+  <select id="selectPermissionMenus" parameterType="java.lang.Integer" resultMap="MenuTreeMap">
+    select * from sys_menu where id in (select menu_id from sys_permission_menu_pk where permission_id = #{permissionId,jdbcType=INTEGER})
+    order by level,sort,id asc
+  </select>
+  <select id="selectUserMenus" parameterType="java.lang.Long" resultMap="MenuTreeMap">
+    select * from sys_menu where id in (select menu_id from sys_permission_menu_pk where permission_id in(
+    select permission_id from sys_role_permission_pk where role_id in (select id from sys_role where id in
+    (select role_id from sys_user_group_role_pk
+    where group_id in (select group_id from sys_user_group_pk where user_id = #{userId,jdbcType=BIGINT})
+    union all select role_id from sys_user_role_pk where user_id = #{userId,jdbcType=BIGINT})))) order by level, sort, id asc
+  </select>
+</mapper>

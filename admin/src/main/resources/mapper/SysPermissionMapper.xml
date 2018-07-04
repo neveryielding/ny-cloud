@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nycloud.admin.mapper.SysPermissionMapper">
+  <resultMap id="BaseResultMap" type="com.nycloud.admin.model.SysPermission">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+  </resultMap>
+  <select id="selectRoleNoPermissions" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select A.* from sys_permission as A where A.id not in (select B.permission_id from sys_role_permission_pk AS B where B.role_id = #{roleId,jdbcType=INTEGER})
+    <if  test="name != null">
+      and A.name like '%${name}%'
+    </if>
+  </select>
+  <select id="selectRolePermissions" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select A.* from sys_permission as A where A.id in (select B.permission_id from sys_role_permission_pk as B where B.role_id = #{roleId,jdbcType=INTEGER})
+    <if test="name != null">
+      and A.name like '%${name}%'
+    </if>
+  </select>
+</mapper>

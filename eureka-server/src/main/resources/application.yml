@@ -1,0 +1,17 @@
+server:
+  port: 8760
+spring:
+  application:
+    name: nycloud-eureka-server
+  profiles:
+    active: nycloud-eureka-server
+eureka:
+  server:
+    enable-self-preservation: false
+  instance:
+    hostname: nycloud-eureka-server
+  client:
+    fetchRegistry: false
+    registerWithEureka: false
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
