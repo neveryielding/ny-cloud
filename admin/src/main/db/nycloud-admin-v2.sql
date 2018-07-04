@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50721
 File Encoding         : 65001
 
-Date: 2018-07-03 19:07:13
+Date: 2018-07-04 17:46:01
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -279,7 +279,7 @@ INSERT INTO `sys_resource` VALUES ('211216196643860480', '获取登陆授权后�
 INSERT INTO `sys_resource` VALUES ('211216196652249088', '用户详情查询', 'sys_user_detail', '查询详情', '/api/sysUser/{id}', 'GET', '根据id查询用户详细信息', '211216196593528832', null, '2', '1', '2');
 INSERT INTO `sys_resource` VALUES ('211216196660637696', '用户未关联角色查询', 'sys_user_no_role', '查询', '/api/sysUser/userNoRelationRoleList', 'GET', '根据用户id查询该用户未关联的角色并返回角色列表', '211216196593528832', null, '2', '1', '2');
 INSERT INTO `sys_resource` VALUES ('211216196664832000', '用户所有资源编码查询', '', '', '/api/sysUser/noPermission/userAllResourceCodes', 'GET', '根据用户id查询该用户已关联的角色并返回角色列表', '211216196593528832', null, '2', '1', '3');
-INSERT INTO `sys_resource` VALUES ('211216196681609216', '查询用户名是否存在', 'sys_user_name_exist', '查询', '/api/sysUser/noPermission/checkUserNameIsExist', 'GET', '根据用户Id查询分配的角色权限下面的资源列表', '211216196593528832', null, '2', '1', '3');
+INSERT INTO `sys_resource` VALUES ('211216196681609216', '查询用户名是否存在', '', '', '/api/sysUser/noPermission/checkUserNameIsExist', 'GET', '根据用户Id查询分配的角色权限下面的资源列表', '211216196593528832', null, '2', '1', '3');
 INSERT INTO `sys_resource` VALUES ('211216196689997824', '用户多个资源编码匹配', '', '', '/api/sysUser/noPermission/userResourceCodes', 'GET', '根据用户id查询该用户已关联的角色并返回角色列表', '211216196593528832', null, '2', '1', '3');
 INSERT INTO `sys_resource` VALUES ('211216196694192128', '用户编辑信息查询', 'sys_user_edit_info', '查询编辑详情', '/api/sysUser/edit/{id}', 'GET', '根据id查询用户修改信息', '211216196593528832', null, '2', '1', '2');
 INSERT INTO `sys_resource` VALUES ('211216196702580736', '用户已关联角色查询', 'sys_user_role', '查询', '/api/sysUser/userRoleList', 'GET', '根据用户id查询该用户已关联的角色并返回角色列表', '211216196593528832', null, '2', '1', '2');
@@ -439,4 +439,4 @@ CREATE TABLE `sys_user_role_pk` (
 -- Records of sys_user_role_pk
 -- ----------------------------
 INSERT INTO `sys_user_role_pk` VALUES ('196618686130565120', '1');
-INSERT INTO `sys_user_role_pk` VALUES ('209673570417389568', '3');
+INSERT INTO `sys_user_role_pk` VALUES ('209673570417389568', '1');
