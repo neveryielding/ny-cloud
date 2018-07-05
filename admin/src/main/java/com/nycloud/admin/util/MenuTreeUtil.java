@@ -84,7 +84,7 @@ public class MenuTreeUtil {
      */
     public static List<MenuTree> generateMenuTree(List<MenuTree> sortList) {
         if (ListUtils.isEmpty(sortList)) {
-            return null;
+            return sortList;
         }
         List<MenuTree> nodeList = new ArrayList<>();
         sortList.stream().forEach(currentNode -> {
