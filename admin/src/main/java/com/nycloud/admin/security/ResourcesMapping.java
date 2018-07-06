@@ -1,4 +1,4 @@
-package com.nycloud.security.annotation;
+package com.nycloud.admin.security;
 
 import java.lang.annotation.*;
 

@@ -9,7 +9,7 @@ import com.nycloud.common.constants.SysConstant;
 import com.nycloud.common.dto.RequestDto;
 import com.nycloud.common.utils.ListUtils;
 import com.nycloud.common.vo.HttpResponse;
-import com.nycloud.security.annotation.ResourcesMapping;
+import com.nycloud.admin.security.ResourcesMapping;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.ArrayUtils;

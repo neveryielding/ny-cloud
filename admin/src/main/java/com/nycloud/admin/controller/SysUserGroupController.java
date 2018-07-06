@@ -11,7 +11,7 @@ import com.nycloud.admin.service.SysUserGroupService;
 import com.nycloud.common.constants.SysConstant;
 import com.nycloud.common.dto.RequestDto;
 import com.nycloud.common.vo.HttpResponse;
-import com.nycloud.security.annotation.ResourcesMapping;
+import com.nycloud.admin.security.ResourcesMapping;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +68,7 @@ public class SysUserGroupController {
         return new HttpResponse().success(sysUserGroupService.findByPageList(requestDto, SysUserGroup.class));
     }
 
-    @ApiOperation(value = "用户修改", notes = "根据传递的SysUserGroup对象来更新, SysUserGroup对象必须包含id")
+    @ApiOperation(value = "用户组修改", notes = "根据传递的SysUserGroup对象来更新, SysUserGroup对象必须包含id")
     @ResourcesMapping(element = "修改", code = "sys_user_group_update")
     @PutMapping
     public HttpResponse update(@Validated @RequestBody SysUserGroup dto, BindingResult bindingResult) {

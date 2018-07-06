@@ -2,7 +2,7 @@ package com.nycloud.admin;
 
 import com.nycloud.common.constants.SysConstant;
 import com.nycloud.common.utils.SnowFlake;
-import com.nycloud.security.annotation.ResourcesMapping;
+import com.nycloud.admin.security.ResourcesMapping;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;

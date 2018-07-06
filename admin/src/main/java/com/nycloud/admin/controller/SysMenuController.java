@@ -5,7 +5,7 @@ import com.nycloud.admin.service.SysMenuService;
 import com.nycloud.common.constants.SysConstant;
 import com.nycloud.common.dto.RequestDto;
 import com.nycloud.common.vo.HttpResponse;
-import com.nycloud.security.annotation.ResourcesMapping;
+import com.nycloud.admin.security.ResourcesMapping;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;

@@ -106,7 +106,6 @@ public class SysUserService extends BaseService<SysUserMapper, SysUser> {
      * @param id 用户ID
      */
     public void delete(Long id) {
-        super.deleteById(id);
         // 删除用户和角色的关联
         SysUserRolePk userRolePk = new SysUserRolePk();
         userRolePk.setUserId(id);

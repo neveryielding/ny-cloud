@@ -1,19 +1,3 @@
-/**
- * Copyright(c) Cloudolp Technology Co.,Ltd.
- * All Rights Reserved.
- * <p>
- * This software is the confidential and proprietary information of Cloudolp
- * Technology Co.,Ltd. ("Confidential Information"). You shall not disclose
- * such Confidential Information and shall use it only in accordance with the
- * terms of the license agreement you entered into with Cloudolp Technology Co.,Ltd.
- * For more information about Cloudolp, welcome to http://www.cloudolp.com
- * <p>
- * project: peony-spring
- * <p>
- * Revision History:
- * Date		    Version		Name				Description
- * 3/3/2017	1.0			Franklin			Creation File
- */
 package com.nycloud.admin.security;
 
 import com.nycloud.admin.model.SysResource;
@@ -34,13 +18,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Description:
- *
- *
- * @author Franklin
- * @date 3/3/2017 10:52 AM
+ * @author super.wu
  */
-
 @Component
 public class SecurityInterceptor extends HandlerInterceptorAdapter {
 
@@ -58,10 +37,9 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
         String userId = request.getHeader("userId");
         String userName = request.getHeader("username");
         String roles = request.getHeader("roles");
-//        String userId = "196618686130565120";
-//        String userName = "admin";
         try{
             if (userId == null) {
+                // swagger-ui 测试用
                 userId = "196618686130565120";
                 userName = "admin";
                 roles = SysConstant.SUPER_ADMIN_ROLE_CODE;
@@ -90,7 +68,8 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
                 // 获取用户是否和该资源有关联
                 SysResource sysResource = sysResourceService.selectUserRolePermissionResource(map);
                 if (sysResource == null) {
-                    throw new Exception();
+                    response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                    return false;
                 }
             };
             Object p = authentication.getPrincipal();

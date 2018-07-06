@@ -21,7 +21,7 @@ public class MenuTreeUtil {
      * @return
      */
     public static List<MenuTree> filterGenerateSortMenu(List<MenuTree> allList, List<MenuTree> currentList) {
-        if (ListUtils.isEmpty(currentList) || ListUtils.isEmpty(currentList)) {
+        if (ListUtils.isEmpty(allList) || ListUtils.isEmpty(currentList)) {
             return null;
         }
         // 所有菜单
