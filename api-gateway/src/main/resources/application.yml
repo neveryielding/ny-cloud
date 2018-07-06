@@ -15,12 +15,8 @@ zuul:
     maxTotalConnections: 200
     maxPerRouteConnections: 20
   routes:
-    auth:
-      path: /user/**
-      serviceId: nycloud-auth-server
-      sensitiveHeaders: Cookie,Set-Cookie
     login:
-      path: /login/**
+      path: /auth/**
       serviceId: nycloud-auth-server
       sensitiveHeaders: Cookie,Set-Cookie
     admin:
@@ -42,16 +38,6 @@ default:
 auth:
   permitall:
     -
-      pattern: /login/**
+      pattern: /auth/**
     -
       pattern: /**/public/**
-security:
-  oauth2:
-    client:
-      access-token-uri: /oauth/token
-      user-authorization-uri: /oauth/authorize
-      client-id: frontend
-      client-secret: frontend
-    resource:
-      user-info-uri: /userinfo
-      token-info-uri: /oauth/check_token

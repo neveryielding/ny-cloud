@@ -33,6 +33,7 @@
 		<common.lang3.version>3.7</common.lang3.version>
 		<org.projectlombok.version>1.16.20</org.projectlombok.version>
 		<log4j.version>1.2.17</log4j.version>
+		<jwt.version>0.9.0</jwt.version>
 	</properties>
 
 	<dependencies>
@@ -57,6 +58,11 @@
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>${log4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>${jwt.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

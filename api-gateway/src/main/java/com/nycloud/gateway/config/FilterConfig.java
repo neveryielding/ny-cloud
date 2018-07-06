@@ -10,21 +10,21 @@ import org.springframework.core.Ordered;
 /**
  * @author super.wu
  */
-@Configuration
-@EnableAutoConfiguration
-public class FilterConfig {
-
-    @Bean
-    public FilterRegistrationBean filterRegistrationBean() {
-        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
-        registrationBean.setFilter(headerEnhanceFilter());
-        registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
-        return registrationBean;
-    }
-
-    @Bean
-    public HeaderEnhanceFilter headerEnhanceFilter() {
-        return new HeaderEnhanceFilter();
-    }
-
-}
+//@Configuration
+//@EnableAutoConfiguration
+//public class FilterConfig {
+//
+//    @Bean
+//    public FilterRegistrationBean filterRegistrationBean() {
+//        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+//        registrationBean.setFilter(headerEnhanceFilter());
+//        registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+//        return registrationBean;
+//    }
+//
+//    @Bean
+//    public HeaderEnhanceFilter headerEnhanceFilter() {
+//        return new HeaderEnhanceFilter();
+//    }
+//
+//}

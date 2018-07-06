@@ -1,11 +1,14 @@
-package com.nycloud.auth.config.custom;
+package com.nycloud.auth.model;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import java.util.Collection;
-import java.util.List;
 
-public class CustomUserDetails implements UserDetails {
+/**
+ * @description:
+ * @author: super.wu
+ * @date: Created in 2018/7/6 0006
+ * @modified By:
+ * @version: 1.0
+ **/
+public class UserDetails {
 
     static final long serialVersionUID = -7588980448693010399L;
 
@@ -18,10 +21,6 @@ public class CustomUserDetails implements UserDetails {
     private boolean enabled = true;
 
     private String clientId;
-
-    private List<String> roles;
-
-    private Collection<? extends GrantedAuthority> authorities;
 
     public String getClientId() {
         return clientId;
@@ -43,7 +42,6 @@ public class CustomUserDetails implements UserDetails {
         this.password = password;
     }
 
-
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
@@ -52,59 +50,35 @@ public class CustomUserDetails implements UserDetails {
         this.userId = userId;
     }
 
-    public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
-        this.authorities = authorities;
-    }
-
-    public List<String> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
-    }
-
-    @Override
     public String getPassword() {
         return this.password;
     }
 
-    @Override
     public String getUsername() {
         return this.username;
     }
 
-    @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
-    @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
-    @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
-    @Override
     public boolean isEnabled() {
         return enabled;
     }
 
     public static class CustomUserDetailsBuilder {
-        private CustomUserDetails userDetails = new CustomUserDetails();
+        private UserDetails userDetails = new UserDetails();
 
         public CustomUserDetailsBuilder withUsername(String username) {
             userDetails.setUsername(username);
-            userDetails.setAuthorities(null);
             return this;
         }
 
@@ -123,14 +97,8 @@ public class CustomUserDetails implements UserDetails {
             return this;
         }
 
-        public CustomUserDetailsBuilder withRoles(List<String> roles) {
-            userDetails.setRoles(roles);
-            return this;
-        }
-
-        public CustomUserDetails build() {
+        public UserDetails build() {
             return userDetails;
         }
     }
-
 }

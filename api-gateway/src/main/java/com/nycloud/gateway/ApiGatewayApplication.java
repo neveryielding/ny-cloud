@@ -1,9 +1,11 @@
 package com.nycloud.gateway;
 
+import com.nycloud.gateway.security.AccessFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
+import org.springframework.context.annotation.Bean;
 
 /**
  * @author super.wu 服务API网关
@@ -16,4 +18,11 @@ public class ApiGatewayApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ApiGatewayApplication.class, args);
 	}
+
+
+	@Bean
+	public AccessFilter accessFilter() {
+		return new AccessFilter();
+	}
+
 }

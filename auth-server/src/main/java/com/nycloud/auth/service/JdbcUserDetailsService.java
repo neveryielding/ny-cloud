@@ -1,17 +1,13 @@
-package com.nycloud.auth.config.service;
+package com.nycloud.auth.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nycloud.auth.config.custom.CustomUserDetails;
+import com.nycloud.auth.model.UserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.security.oauth2.common.exceptions.InvalidClientException;
-import org.springframework.security.oauth2.provider.NoSuchClientException;
 import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -32,17 +28,13 @@ public class JdbcUserDetailsService {
     private JdbcTemplate jdbcTemplate;
 
     public JdbcUserDetailsService() {
-        this.selectUserDetailsSql = "select id, username, `password`, `state`, authorities, `name` from sys_user where username = ?";
+        this.selectUserDetailsSql = "select id, username, `password`, `state`, `name` from sys_user where username = ?";
         this.selectUserDetailsRoleSql = "select code from sys_role where id in (select role_id from sys_user_role_pk where user_id = ? union all select role_id from sys_user_group_role_pk where group_id in (select group_id from sys_user_group_pk where user_id = ?))";
     }
 
-    public CustomUserDetails loadUserDetailsByUserName(String username) throws InvalidClientException {
-        try {
-            CustomUserDetails details = this.jdbcTemplate.queryForObject(this.selectUserDetailsSql, new JdbcUserDetailsService.UserDetailsRowMapper(), new Object[]{username});
-            return details;
-        } catch (EmptyResultDataAccessException var4) {
-            throw new NoSuchClientException("No client with requested username: " + username);
-        }
+    public UserDetails loadUserDetailsByUserName(String username)  {
+        UserDetails details = this.jdbcTemplate.queryForObject(this.selectUserDetailsSql, new JdbcUserDetailsService.UserDetailsRowMapper(), new Object[]{username});
+        return details;
     }
 
     public List<String> loadUserRolesByUserId(Long userId) {
@@ -50,16 +42,15 @@ public class JdbcUserDetailsService {
         return roles;
     }
 
-    private static class UserDetailsRowMapper implements RowMapper<CustomUserDetails> {
+    private static class UserDetailsRowMapper implements RowMapper<UserDetails> {
 
         @Override
-        public CustomUserDetails mapRow(ResultSet resultSet, int i) throws SQLException {
-            CustomUserDetails customUserDetails = new CustomUserDetails();
+        public UserDetails mapRow(ResultSet resultSet, int i) throws SQLException {
+            UserDetails customUserDetails = new UserDetails();
             customUserDetails.setUserId(resultSet.getString(1));
             customUserDetails.setUsername(resultSet.getString(2));
             customUserDetails.setPassword(resultSet.getString(3));
             customUserDetails.setEnabled(resultSet.getBoolean(4));
-            customUserDetails.setAuthorities(new HashSet<>());
             return customUserDetails;
         }
 

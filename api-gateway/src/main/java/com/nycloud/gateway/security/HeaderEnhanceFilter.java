@@ -1,10 +1,10 @@
 package com.nycloud.gateway.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.zuul.context.RequestContext;
+import com.nycloud.common.jwt.JwtEntity;
+import com.nycloud.common.jwt.JwtUtil;
 import com.nycloud.gateway.constants.SecurityConstants;
 import com.nycloud.gateway.properties.PermitAllUrlProperties;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +16,6 @@ import java.io.*;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -43,25 +42,18 @@ public class HeaderEnhanceFilter implements Filter {
         // test if request url is permit all , then remove authorization from header
         LOGGER.info(String.format("Enhance request URI : %s.", requestURI));
         if(isPermitAllUrl(requestURI) && isNotOAuthEndpoint(requestURI)) {
-            HttpServletRequest resetRequest = removeValueFromRequestHeader((HttpServletRequest) servletRequest);
-            filterChain.doFilter(resetRequest, servletResponse);
-            return;
+//            HttpServletRequest resetRequest = removeValueFromRequestHeader((HttpServletRequest) servletRequest);
+            filterChain.doFilter(servletRequest, servletResponse);
         } else {
             if (StringUtils.isNotEmpty(authorization)) {
                 // 判断是否是jwt token
                 if (isJwtBearerToken(authorization)) {
                     try {
-                        authorization = StringUtils.substringBetween(authorization, ".");
-                        String decoded = new String(Base64.decodeBase64(authorization));
-
-                        Map properties = new ObjectMapper().readValue(decoded, Map.class);
-
-                        String userId = (String) properties.get(SecurityConstants.USER_ID_IN_HEADER);
-
-                        RequestContext.getCurrentContext().addZuulRequestHeader("userId", userId);
-                        RequestContext.getCurrentContext().addZuulRequestHeader("username", (String)properties.get("user_name"));
-                        RequestContext.getCurrentContext().addZuulRequestHeader("roles", (String)properties.get("roles"));
-
+                        JwtEntity jwtEntity = JwtUtil.parseToken(authorization);
+                        RequestContext.getCurrentContext().addZuulRequestHeader("userId", jwtEntity.getUserId());
+                        RequestContext.getCurrentContext().addZuulRequestHeader("username", jwtEntity.getUsername());
+                        RequestContext.getCurrentContext().addZuulRequestHeader("roles", jwtEntity.getRoles());
+                        filterChain.doFilter(servletRequest, servletResponse);
                     } catch (Exception e) {
                         e.printStackTrace();
                         LOGGER.error("Failed to customize header for the request, but still release it as the it would be regarded without any user details.", e);
@@ -70,9 +62,9 @@ public class HeaderEnhanceFilter implements Filter {
             } else {
                 LOGGER.info("Regard this request as anonymous request, so set anonymous user_id in the header.");
                 RequestContext.getCurrentContext().addZuulRequestHeader(SecurityConstants.USER_ID_IN_HEADER, ANONYMOUS_USER_ID);
+                filterChain.doFilter(servletRequest, servletResponse);
             }
         }
-        filterChain.doFilter(servletRequest, servletResponse);
     }
 
     @Override
@@ -81,11 +73,11 @@ public class HeaderEnhanceFilter implements Filter {
     }
 
     private boolean isJwtBearerToken(String token) {
-        return StringUtils.countMatches(token, ".") == 2 && (token.startsWith("Bearer") || token.startsWith("bearer"));
+        return StringUtils.countMatches(token, ".") == 3 && (token.startsWith("Bearer") || token.startsWith("bearer"));
     }
 
     private boolean isNotOAuthEndpoint(String requestURI) {
-        return !requestURI.contains("/login");
+        return requestURI.contains("/auth");
     }
 
     private HttpServletRequestWrapper removeValueFromRequestHeader(HttpServletRequest request) {

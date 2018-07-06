@@ -3,7 +3,6 @@ package com.nycloud.admin.security;
 import com.nycloud.common.constants.SysConstant;
 import com.nycloud.common.utils.ListUtils;
 import lombok.Data;
-
 import java.util.List;
 
 /**
