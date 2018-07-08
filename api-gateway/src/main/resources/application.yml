@@ -38,6 +38,6 @@ default:
 auth:
   permitall:
     -
-      pattern: /auth/**
+      pattern: /auth/login
     -
       pattern: /**/public/**

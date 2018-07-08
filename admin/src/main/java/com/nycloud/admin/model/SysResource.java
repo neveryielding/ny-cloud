@@ -34,6 +34,8 @@ public class SysResource {
 
     private Integer state;
 
+    private Integer type;
+
     /** 扩展属性 资源组下的资源信息 **/
     private List<SysResource> children;
     /** 扩展属性 资源是否被选中 **/

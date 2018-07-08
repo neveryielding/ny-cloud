@@ -13,6 +13,7 @@
 		<module>auth-server</module>
 		<module>api-gateway</module>
 		<module>admin</module>
+		<module>common</module>
 	</modules>
 
 	<name>ny-cloud</name>

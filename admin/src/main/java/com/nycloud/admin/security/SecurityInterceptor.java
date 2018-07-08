@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,7 +27,7 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
     private Logger logger = LoggerFactory.getLogger(SecurityInterceptor.class);
 
     @Autowired
-    private SysResourceService sysResourceService;
+    private FeignAuthClient feignAuthClient;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -66,10 +67,15 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
                    put("roleCodes", roleCodes);
                 }};
                 // 获取用户是否和该资源有关联
-                SysResource sysResource = sysResourceService.selectUserRolePermissionResource(map);
-                if (sysResource == null) {
-                    response.setStatus(HttpStatus.UNAUTHORIZED.value());
-                    return false;
+                try {
+                    ResponseEntity<Boolean> responseEntity =  feignAuthClient.checkResource(uid, requestURI, urlRequestType);
+                    if (!responseEntity.getBody()) {
+                        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                        logger.debug("unauthorized", uid);
+                        return false;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             };
             Object p = authentication.getPrincipal();

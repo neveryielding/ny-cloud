@@ -2,7 +2,10 @@ package com.nycloud.common.jwt;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 /**
  * @description:
@@ -14,6 +17,7 @@ import java.util.Map;
 public class JwtUtil {
 
     private static final String SECRET = "123434508340!)_~(";
+    private static final long EXPIRATION_TIME = 3600_000_000L;
 
     /**
      * 生成token
@@ -21,13 +25,12 @@ public class JwtUtil {
      * @return
      */
     public static String generateToken(Map<String, Object> map) {
-        // 设置 Jwt 过期时间
-        long expValue =  60 * 60 * 12 + System.currentTimeMillis();
         String jwt = Jwts.builder()
                 .setClaims(map)
-                .setExpiration(new Date(expValue))
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
+        System.out.println("Bearer." + jwt);
         return "Bearer." + jwt;
     }
 
@@ -48,6 +51,13 @@ public class JwtUtil {
         return jwt;
     }
 
+    public static Map<String, Object> parseToken1(String token) {
+        Map<String, Object> body = Jwts.parser()
+                .setSigningKey(SECRET)
+                .parseClaimsJws(token.replace("Bearer.",""))
+                .getBody();
+        return body;
+    }
 
     public static void validateToken(String token) {
         try {
@@ -57,9 +67,24 @@ public class JwtUtil {
                     .parseClaimsJws(token.replace("Bearer.",""))
                     .getBody();
 
-
         }catch (Exception e){
             throw new IllegalStateException("Invalid Token. "+e.getMessage());
         }
     }
+
+    public static boolean isJwtBearerToken(String token) {
+        return StringUtils.countMatches(token, ".") == 3 && (token.startsWith("Bearer") || token.startsWith("bearer"));
+    }
+
+    public static void main(String [] args) {
+        HashMap<String, Object> map = new HashMap<>(2);
+        map.put("aaaa", "vvvv");
+        map.put("ccc", "dddd");
+        String token = generateToken(map);
+        for(int i = 0; i < 100; i ++) {
+            Map<String, Object> s1 = parseToken1("Bearer.eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6IlVTRVJfTUFOQUdFUiIsImV4cCI6MTUzNDYyMTIzMSwidXNlcklkIjoiMjA5NjczNTcwNDE3Mzg5NTY4IiwiZW5hYmxlZCI6dHJ1ZSwidXNlcm5hbWUiOiJndWVzdCJ9.EYLZmJ6pfEZL5DLDnpN0ADxxTZZzObxVGmafCZiI6FE2dgNB3f8oItmI7eH8JWFcAt0wWFfp2QQ8hjzxBKgMYA");
+            System.out.println(s1.toString());
+        }
+    }
+
 }

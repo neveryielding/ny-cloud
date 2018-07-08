@@ -18,15 +18,15 @@ spring:
   redis:
     database: 0
     host: localhost
+    port: 6379
     password:
-    timeout: 3000
+    timeout: 5000
     jedis:
       pool:
         max-active: 5
-        min-idle: 0
         max-wait: 1
         max-idle: 8
-    port: 6379
+        max-total: 10
 server:
   port: 8761
 eureka:
