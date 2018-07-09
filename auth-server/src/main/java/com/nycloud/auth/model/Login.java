@@ -16,7 +16,7 @@ public class Login {
     private String username;
 
     @NotEmpty
-    @Size(min = 6, max = 16)
+    @Size(min = 32, max = 32)
     private String password;
 
     @NotEmpty

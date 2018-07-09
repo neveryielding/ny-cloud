@@ -27,8 +27,6 @@ spring:
         max-wait: 1
         max-idle: 8
     port: 6379
-server:
-  port: 8761
 eureka:
   client:
     serviceUrl:

@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
+import com.nycloud.common.constants.Constant;
 import com.nycloud.common.jwt.JwtEntity;
 import com.nycloud.common.jwt.JwtUtil;
+import com.nycloud.gateway.feign.FeignAuthClient;
 import com.nycloud.gateway.properties.PermitAllUrlProperties;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -29,6 +31,10 @@ public class AccessFilter extends ZuulFilter {
     @Autowired
     private PermitAllUrlProperties urlProperties;
 
+    @Autowired
+    private FeignAuthClient feignAuthClient;
+
+
     @Override
     public String filterType() {
         return "pre";
@@ -49,26 +55,36 @@ public class AccessFilter extends ZuulFilter {
         RequestContext ctx = RequestContext.getCurrentContext();
         HttpServletRequest request = ctx.getRequest();
         String requestURI = request.getRequestURI();
-        // 如果URL需要做权限校验
-        if (!urlProperties.isPermitAllUrl(requestURI)) {
-            String authorization = request.getHeader("Authorization");
-            if (StringUtils.isNotEmpty(authorization) && JwtUtil.isJwtBearerToken(authorization)) {
-                JwtEntity jwtEntity = JwtUtil.parseToken(authorization);
-                if (jwtEntity.isExpire()) {
-                    //过滤该请求，不往下级服务去转发请求，到此结束
-                    ctxError(ctx, 403, "token已过期，请重新登录");
-                    log.warn("token expire", authorization);
-                } else {
-                    ctx.addZuulRequestHeader("userId", jwtEntity.getUserId());
-                    ctx.addZuulRequestHeader("username", jwtEntity.getUsername());
-                    ctx.addZuulRequestHeader("roles", jwtEntity.getRoles());
-                    log.info("token success", authorization);
-                }
+
+        // 如果URL不需要做权限校验
+        if (urlProperties.isPermitAllUrl(requestURI)) {
+            return null;
+        }
+
+        String authorization = request.getHeader(Constant.AUTHORIZATION);
+        if (StringUtils.isEmpty(authorization) || !JwtUtil.isJwtBearerToken(authorization)) {
+            ctxError(ctx, 401, "您没有携带有效token,无权限访问!");
+            return null;
+        }
+
+        JwtEntity jwtEntity = JwtUtil.parseToken(authorization);
+        if (jwtEntity.isExpire()) {
+            //过滤该请求，不再往服务去转发请求，到此结束
+            ctxError(ctx, 403, "token已过期，请重新登录");
+            log.warn("token expire", authorization);
+        } else {
+            Map<String, ?> map = feignAuthClient.checkToken(jwtEntity.getUserId(), authorization);
+            if ((Boolean) map.get(Constant.ACTIVE)) {
+                ctx.addZuulRequestHeader("userId", jwtEntity.getUserId());
+                ctx.addZuulRequestHeader("username", jwtEntity.getUsername());
+                ctx.addZuulRequestHeader("roles", jwtEntity.getRoles());
+                log.info("token success", authorization);
             } else {
-                ctxError(ctx, 401, "您没有携带有效token,无权限访问!");
-                log.warn("token error", requestURI);
+                ctxError(ctx, 403, "token已在别处登录");
+                log.warn("token expire", authorization);
             }
         }
+
         log.info("send {} request to {}", request.getMethod(), request.getRequestURL().toString());
         return null;
     }

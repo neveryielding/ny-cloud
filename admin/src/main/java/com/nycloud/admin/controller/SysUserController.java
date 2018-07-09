@@ -12,10 +12,9 @@ import com.nycloud.admin.service.SysUserService;
 import com.nycloud.common.constants.SysConstant;
 import com.nycloud.common.dto.RequestDto;
 import com.nycloud.common.vo.HttpResponse;
-import com.nycloud.admin.security.ResourcesMapping;
+import com.nycloud.admin.security.annotation.ResourcesMapping;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -23,9 +22,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @description:
@@ -180,24 +177,6 @@ public class SysUserController {
     public HttpResponse userAllResourceCodes(Authentication authentication) {
         UserEntity userEntity = (UserEntity) authentication.getPrincipal();
         return HttpResponse.resultSuccess(sysUserService.selectUserAllResourceCodes(userEntity.getUserId()));
-    }
-
-    @ApiOperation(value = "用户多个资源编码匹配",  notes = "根据用户id查询该用户已关联的角色并返回角色列表")
-    @GetMapping(SysConstant.API_NO_PERMISSION +  "userResourceCodes")
-    public HttpResponse userResourceCodes(Authentication authentication, String[] resourceCodes) {
-        if (ArrayUtils.isEmpty(resourceCodes)) {
-            return HttpResponse.errorParams();
-        }
-        UserEntity userEntity = (UserEntity) authentication.getPrincipal();
-        // 如果是超级管理员则直接返回资源
-        if (userEntity.isAdmin()) {
-            return HttpResponse.resultSuccess(resourceCodes);
-        }
-        Map<String, Object> map = new HashMap<String, Object>(2) {{
-           put("userId", userEntity.getUserId());
-           put("codes", resourceCodes);
-        }};
-        return HttpResponse.resultSuccess(sysUserService.selectUserResourceCodes(map));
     }
 
     /**

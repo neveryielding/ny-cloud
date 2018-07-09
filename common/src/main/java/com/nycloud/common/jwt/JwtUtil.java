@@ -3,10 +3,9 @@ package com.nycloud.common.jwt;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.commons.lang3.StringUtils;
-
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
+
 /**
  * @description:
  * @author: super.wu
@@ -76,15 +75,9 @@ public class JwtUtil {
         return StringUtils.countMatches(token, ".") == 3 && (token.startsWith("Bearer") || token.startsWith("bearer"));
     }
 
-    public static void main(String [] args) {
-        HashMap<String, Object> map = new HashMap<>(2);
-        map.put("aaaa", "vvvv");
-        map.put("ccc", "dddd");
-        String token = generateToken(map);
-        for(int i = 0; i < 100; i ++) {
-            Map<String, Object> s1 = parseToken1("Bearer.eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6IlVTRVJfTUFOQUdFUiIsImV4cCI6MTUzNDYyMTIzMSwidXNlcklkIjoiMjA5NjczNTcwNDE3Mzg5NTY4IiwiZW5hYmxlZCI6dHJ1ZSwidXNlcm5hbWUiOiJndWVzdCJ9.EYLZmJ6pfEZL5DLDnpN0ADxxTZZzObxVGmafCZiI6FE2dgNB3f8oItmI7eH8JWFcAt0wWFfp2QQ8hjzxBKgMYA");
-            System.out.println(s1.toString());
-        }
+    public static void main(String[] args) {
+        String token = "Bearer.eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE1MzQ3MzE0OTR9.8r5-8w0R4Y4BC0Dwn1jzZ-sIC8oaQ-rrKcAXolqWqgZiRtczHsYVd6p9hMis3AcFhb8JUeoZiCmEQz83lk7MNQ";
+        System.out.println(parseToken(token).toString());
     }
 
 }

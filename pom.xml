@@ -9,7 +9,6 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>eureka-server</module>
 		<module>auth-server</module>
 		<module>api-gateway</module>
 		<module>admin</module>
@@ -43,7 +42,18 @@
 			<artifactId>spring-boot-starter</artifactId>
 			<version>${spring.boot.version}</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-consul-discovery</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-hystrix</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>

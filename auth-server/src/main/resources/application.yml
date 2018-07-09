@@ -1,3 +1,7 @@
 spring:
+  application:
+    name: nycloud-auth-server
   profiles:
     active: dev
+server:
+  port: 8761

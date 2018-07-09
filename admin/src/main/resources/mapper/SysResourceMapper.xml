@@ -46,18 +46,6 @@
             union all select role_id from sys_user_role_pk where user_id = #{userId,jdbcType=BIGINT}))))
     and code != ''
   </select>
-  <select id="selectUserResourceCodes" parameterType="java.util.Map" resultType="java.lang.String">
-    select code from sys_resource where id
-    in (select resource_id from sys_permission_resource_pk where permission_id
-      in (select permission_id from sys_role_permission_pk where role_id in (select id from sys_role where id
-        in (select role_id from sys_user_group_role_pk where group_id
-          in (select group_id from sys_user_group_pk where user_id = #{userId,jdbcType=BIGINT})
-            union all select role_id from sys_user_role_pk where user_id = #{userId,jdbcType=BIGINT}))))
-    and code in
-    <foreach item="item" index="index" collection="codes" open="(" separator="," close=")">
-      #{item}
-    </foreach>
-  </select>
   <select id="selectPermissionResources" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select * from sys_resource where id in(select resource_id from sys_permission_resource_pk where permission_id = #{userId,jdbcType=INTEGER})
   </select>

@@ -1,20 +1,36 @@
 spring:
-  application:
-    name: nycloud-auth-server
+  cloud:
+    consul:
+      discovery:
+        preferIpAddress: true
+        enabled: true
+        register: true
+        service-name: nycloud-auth-server
+        health-check-interval: 10s
+        health-check-timeout: 20s
+        heartbeat:
+          enabled: true
+        ip-address: localhost
+        port: ${server.port}
+        lifecycle:
+          enabled: true
+        scheme: http
+        prefer-agent-address: false
+        register-health-check: true
+        tags: master
+        query-passing: true
+      retry:
+        initial-interval: 1000
+        max-attempts: 4
+        max-interval: 1000
+      host: 127.0.0.1
+      port: 8500
   datasource:
     url: jdbc:mysql://localhost:3306/nycloud-admin-v2?useUnicode=true&characterEncoding=utf-8
     username: root
     password: 123456
-    driverClassName: com.mysql.jdbc.Driver
-    dbcp2:
-      max-idle: 5
-      max-wait-millis: 10000
-      min-idle: 2
-      initial-size: 3
-      validation-query: SELECT 1
-      time-between-eviction-runs-millis: 18800
-    tomcat:
-      jdbc-interceptors: ConnectionState;SlowQueryReport(threshold=50)
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
   redis:
     database: 0
     host: localhost
@@ -27,11 +43,3 @@ spring:
         max-wait: 1
         max-idle: 8
         max-total: 10
-server:
-  port: 8761
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8760/eureka/ #服务注册中心地址
-  instance:
-    hostname: localhost

@@ -4,14 +4,12 @@ import com.github.pagehelper.PageHelper;
 import com.nycloud.admin.dto.UserRoleDto;
 import com.nycloud.admin.mapper.SysRoleMapper;
 import com.nycloud.admin.mapper.SysUserRolePkMapper;
-import com.nycloud.admin.model.SysRole;
 import com.nycloud.admin.model.SysUserRolePk;
 import com.nycloud.common.vo.ResponsePage;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

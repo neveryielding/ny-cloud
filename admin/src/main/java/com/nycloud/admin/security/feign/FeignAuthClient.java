@@ -1,4 +1,4 @@
-package com.nycloud.admin.security;
+package com.nycloud.admin.security.feign;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @version: 1.0
  **/
 @Component
-@FeignClient(value = "nycloud-auth-server")
+@FeignClient(value = "nycloud-auth-server", fallback = FeignAuthClientFallback.class)
 public interface FeignAuthClient {
 
     /**

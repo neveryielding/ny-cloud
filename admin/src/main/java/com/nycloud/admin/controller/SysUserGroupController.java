@@ -11,7 +11,7 @@ import com.nycloud.admin.service.SysUserGroupService;
 import com.nycloud.common.constants.SysConstant;
 import com.nycloud.common.dto.RequestDto;
 import com.nycloud.common.vo.HttpResponse;
-import com.nycloud.admin.security.ResourcesMapping;
+import com.nycloud.admin.security.annotation.ResourcesMapping;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -158,7 +158,7 @@ public class SysUserGroupController {
         return HttpResponse.resultSuccess(sysUserGroupRolePkService.loadGroupRoles(dto));
     }
 
-    @ApiOperation(value = "用户所有可用资源查询", notes = "根据用户Id查询分配的角色权限下面的资源列表")
+    @ApiOperation(value = "查询用户租名称是否存在", notes = "根据用户Id查询分配的角色权限下面的资源列表")
     @GetMapping(SysConstant.API_NO_PERMISSION + "exist")
     public HttpResponse exist(@RequestParam String name) {
         SysUserGroup sysUserGroup = new SysUserGroup();

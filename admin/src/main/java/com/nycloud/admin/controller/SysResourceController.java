@@ -5,7 +5,7 @@ import com.nycloud.admin.model.SysResource;
 import com.nycloud.admin.service.SysResourceService;
 import com.nycloud.common.constants.SysConstant;
 import com.nycloud.common.vo.HttpResponse;
-import com.nycloud.admin.security.ResourcesMapping;
+import com.nycloud.admin.security.annotation.ResourcesMapping;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

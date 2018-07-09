@@ -199,13 +199,4 @@ public class SysUserService extends BaseService<SysUserMapper, SysUser> {
         return this.sysResourceMapper.selectUserAllResourceCodes(userId);
     }
 
-    /**
-     * 查询用户是否拥有一个或多个资源编码,根据传递的编码匹配
-     * @param map
-     * @return
-     */
-    public List<String> selectUserResourceCodes(Map<String, Object> map) {
-        return this.sysResourceMapper.selectUserResourceCodes(map);
-    }
-
 }

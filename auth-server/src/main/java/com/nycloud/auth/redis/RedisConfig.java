@@ -17,6 +17,9 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.cache.interceptor.KeyGenerator;
 import java.lang.reflect.Method;
 
+/**
+ * @author super.wu
+ */
 @Configuration
 @EnableCaching
 public class RedisConfig extends CachingConfigurerSupport {

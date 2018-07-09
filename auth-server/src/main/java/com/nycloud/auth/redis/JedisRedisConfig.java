@@ -7,6 +7,9 @@ import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
+/**
+ * @author super.wu
+ */
 @Configuration
 public class JedisRedisConfig {
 

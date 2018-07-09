@@ -48,11 +48,4 @@ public interface SysResourceMapper extends Mapper<SysResource>{
      */
     List<String> selectUserAllResourceCodes(Long userId);
 
-    /**
-     * 查询用户下的一个或多个资源编码
-     * @param map
-     * @return
-     */
-    List<String> selectUserResourceCodes(Map<String, Object> map);
-
 }

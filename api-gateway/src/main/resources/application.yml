@@ -17,10 +17,12 @@ zuul:
   routes:
     login:
       path: /auth/**
+      ignoredPatterns: /consul
       serviceId: nycloud-auth-server
       sensitiveHeaders: Cookie,Set-Cookie
     admin:
       path: /admin/**
+      ignoredPatterns: /consul
       serviceId: nycloud-admin
       sensitiveHeaders: Cookie,Set-Cookie
   retryable: true
@@ -30,11 +32,18 @@ ribbon:
   MaxAutoRetriesNextServer: 0
   ReadTimeout: 5000
   ConnectTimeout: 5000
-default:
-  execution:
-    isolation:
-      thread:
-        timeoutInMilliseconds: 60000
+
+feign:
+  hystrix:
+    enabled: true
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
 auth:
   permitall:
     -

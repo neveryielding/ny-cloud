@@ -1,6 +1,15 @@
 spring:
+  application:
+    name: nycloud-admin
   profiles:
     active: dev
-
 logging:
   config: classpath:logback.xml
+feign:
+  hystrix:
+    enabled: true   #开启Feign Hystrix 支持
+server:
+  port: 8762
+mybatis:
+  type-aliases-package: com.nycloud.admin.model
+  mapper-locations: "classpath*:mapper/*.xml"

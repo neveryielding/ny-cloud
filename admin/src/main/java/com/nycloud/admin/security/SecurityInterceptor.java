@@ -1,7 +1,6 @@
 package com.nycloud.admin.security;
 
-import com.nycloud.admin.model.SysResource;
-import com.nycloud.admin.service.SysResourceService;
+import com.nycloud.admin.security.feign.FeignAuthClient;
 import com.nycloud.common.constants.SysConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
